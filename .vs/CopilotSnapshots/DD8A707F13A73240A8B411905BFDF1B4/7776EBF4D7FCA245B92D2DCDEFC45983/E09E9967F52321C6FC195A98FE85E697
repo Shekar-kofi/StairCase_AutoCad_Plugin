@@ -1,0 +1,200 @@
+﻿<Window x:Class="StaircaseDetails.MainWindow"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ Title="Staircase Details" Height="800" Width="1000" SizeToContent="WidthAndHeight" MaxWidth="1200" MaxHeight="800">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10" VerticalAlignment="Top">
+
+            <!-- Staircase Number -->
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Staircase Number (e.g., '01', '02B'):" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="StaircaseNumberTextBox" Grid.Column="1" Width="100" />
+            </Grid>
+
+            <!-- Riser, Tread, Waist Thickness, Stair Width -->
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Riser (mm):" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="RiserTextBox" Grid.Column="1" Width="80" />
+            </Grid>
+
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Tread (mm):" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="TreadTextBox" Grid.Column="1" Width="80" />
+            </Grid>
+
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Waist Thickness (mm):" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="WaistThicknessTextBox" Grid.Column="1" Width="80" PreviewTextInput="IntegerOnlyInput" />
+            </Grid>
+
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Stair Width (mm):" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="StairWidthTextBox" Grid.Column="1" Width="80" />
+            </Grid>
+
+            <!-- Floor Names -->
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="250" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Bottom Floor Name:" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="BottomFloorNameTextBox" Grid.Column="1" Width="250" />
+            </Grid>
+
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="250" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Top Floor Name:" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="TopFloorNameTextBox" Grid.Column="1" Width="250" />
+            </Grid>
+
+            <!-- Floor Height -->
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Floor Height (mm):" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBox Name="FloorHeightTextBox" Grid.Column="1" Width="80" PreviewTextInput="IntegerOnlyInput" />
+            </Grid>
+
+            <!-- Ground Floor Checkbox -->
+            <CheckBox Name="GroundFloorCheckBox" Content="Ground Floor?" Checked="GroundFloorCheckBox_Checked" Unchecked="GroundFloorCheckBox_Unchecked" Margin="0,2" />
+
+            <!-- Support Options -->
+            <StackPanel Name="SupportOptionsPanel" Visibility="Collapsed" Margin="20,0,0,0">
+                <TextBlock Text="Support Type:" />
+                <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                    <CheckBox Name="BeamSupportCheckBox" Content="Beam Support" Checked="BeamSupportCheckBox_Checked" Unchecked="BeamSupportCheckBox_Unchecked" VerticalAlignment="Center" />
+                    <StackPanel Name="BeamDimensionsPanel" Orientation="Horizontal" Visibility="Collapsed" Margin="10,0,0,0">
+                        <TextBlock Text="Depth (mm):" Width="80" VerticalAlignment="Center" Margin="0,0,5,0" />
+                        <TextBox Name="BeamDepthTextBox" Width="40" />
+                        <TextBlock Text="Width (mm):" Width="80" VerticalAlignment="Center" Margin="10,0,5,0" />
+                        <TextBox Name="BeamWidthTextBox" Width="40" />
+                    </StackPanel>
+                </StackPanel>
+                <CheckBox Name="SlabThickeningCheckBox" Content="Slab Thickening" Checked="SupportType_Checked" Unchecked="SupportType_Unchecked" />
+            </StackPanel>
+
+            <!-- Staircase Type -->
+            <TextBlock Text="Staircase Type:" />
+            <CheckBox Name="HalfTurnCheckBox" Content="Half Turn" Checked="StaircaseType_Checked" Unchecked="StaircaseType_Unchecked" />
+            <CheckBox Name="QuarterTurnCheckBox" Content="Quarter Turn" Checked="StaircaseType_Checked" Unchecked="StaircaseType_Unchecked" />
+
+            <!-- Number of Flights -->
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Number of Flights / Turns:" Grid.Column="0" VerticalAlignment="Center" />
+                <ComboBox Name="FlightsComboBox" Grid.Column="1" SelectionChanged="FlightsComboBox_SelectionChanged" Width="80">
+                    <ComboBoxItem Content="2" />
+                    <ComboBoxItem Content="3" />
+                </ComboBox>
+            </Grid>
+
+            <!-- Dynamic Flight Sections -->
+            <StackPanel Name="FlightsPanel" Orientation="Horizontal" />
+
+            <!-- Orientation of First Flight -->
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Orientation of First Flight:" Grid.Column="0" VerticalAlignment="Center" />
+                <ComboBox Name="OrientationComboBox" Grid.Column="1" Width="150">
+                    <ComboBoxItem Content="Left to Right" />
+                    <ComboBoxItem Content="Right to Left" />
+                </ComboBox>
+            </Grid>
+
+            <!-- Reinforcement Information -->
+            <TextBlock Text="Reinforcement Information:" Margin="0,10,0,5" />
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Longitudinal Bar Size (mm):" Grid.Column="0" VerticalAlignment="Center" />
+                <ComboBox Name="LongitudinalBarSizeComboBox" Grid.Column="1" Width="80">
+                    <ComboBoxItem Content="8" />
+                    <ComboBoxItem Content="10" />
+                    <ComboBoxItem Content="12" />
+                    <ComboBoxItem Content="16" />
+                    <ComboBoxItem Content="20" />
+                </ComboBox>
+                <TextBlock Text="Spacing (mm):" Grid.Column="2" VerticalAlignment="Center" />
+                <ComboBox Name="LongitudinalBarSpacingComboBox" Grid.Column="3" Width="80">
+                    <ComboBoxItem Content="125" />
+                    <ComboBoxItem Content="150" />
+                    <ComboBoxItem Content="175" />
+                    <ComboBoxItem Content="200" />
+                    <ComboBoxItem Content="225" />
+                    <ComboBoxItem Content="250" />
+                    <ComboBoxItem Content="275" />
+                    <ComboBoxItem Content="300" />
+                </ComboBox>
+            </Grid>
+
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Transverse Bar Size (mm):" Grid.Column="0" VerticalAlignment="Center" />
+                <ComboBox Name="TransverseBarSizeComboBox" Grid.Column="1" Width="80">
+                    <ComboBoxItem Content="8" />
+                    <ComboBoxItem Content="10" />
+                    <ComboBoxItem Content="12" />
+                    <ComboBoxItem Content="16" />
+                    <ComboBoxItem Content="20" />
+                </ComboBox>
+                <TextBlock Text="Spacing (mm):" Grid.Column="2" VerticalAlignment="Center" />
+                <ComboBox Name="TransverseBarSpacingComboBox" Grid.Column="3" Width="80">
+                    <ComboBoxItem Content="125" />
+                    <ComboBoxItem Content="150" />
+                    <ComboBoxItem Content="175" />
+                    <ComboBoxItem Content="200" />
+                    <ComboBoxItem Content="225" />
+                    <ComboBoxItem Content="250" />
+                    <ComboBoxItem Content="275" />
+                    <ComboBoxItem Content="300" />
+                </ComboBox>
+            </Grid>
+
+            <!-- Beam Details Panel (Initially Collapsed) -->
+            <StackPanel Name="BeamDetailsPanel" Orientation="Horizontal" Visibility="Collapsed" Margin="20,0,0,0">
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+</Window>

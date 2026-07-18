@@ -1,0 +1,141 @@
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+
+namespace StaircaseDetails
+{
+ public partial class MainWindow : Window
+ {
+ public MainWindow()
+ {
+ InitializeComponent();
+ }
+
+ private void IntegerOnlyInput(object sender, TextCompositionEventArgs e)
+ {
+ // Allow only integer input
+ e.Handled = !int.TryParse(e.Text, out _);
+ }
+
+ private void StaircaseType_Checked(object sender, RoutedEventArgs e)
+ {
+ // Ensure mutual exclusivity between Half Turn and Quarter Turn
+ if (sender == HalfTurnCheckBox && HalfTurnCheckBox.IsChecked == true)
+ {
+ QuarterTurnCheckBox.IsEnabled = false;
+ }
+ else if (sender == QuarterTurnCheckBox && QuarterTurnCheckBox.IsChecked == true)
+ {
+ HalfTurnCheckBox.IsEnabled = false;
+ }
+ }
+
+ private void StaircaseType_Unchecked(object sender, RoutedEventArgs e)
+ {
+ // Re-enable both checkboxes when one isunchecked
+ HalfTurnCheckBox.IsEnabled = true;
+ QuarterTurnCheckBox.IsEnabled = true;
+ }
+
+ private void FlightsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+ {
+ // Clear existing flight sections
+ FlightsPanel.Children.Clear();
+
+ // Get the selected number of flights
+ if (FlightsComboBox.SelectedItem is ComboBoxItem selectedItem && int.TryParse(selectedItem.Content.ToString(), out int numberOfFlights))
+ {
+ for (int i =1; i <= numberOfFlights; i++)
+ {
+ // Create a section for each flight
+ StackPanel flightPanel = new StackPanel { Orientation = Orientation.Vertical, Margin = new Thickness(10) };
+ flightPanel.Children.Add(new TextBlock { Text = $"Flight {i} Details:" });
+
+ // Lower Landing Details
+ flightPanel.Children.Add(new TextBlock { Text = "Lower Landing Details:" });
+ StackPanel lowerLandingPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0,2,0,2) };
+ lowerLandingPanel.Children.Add(new TextBlock { Text = "Landing Width:", Width =150, VerticalAlignment = VerticalAlignment.Center });
+ lowerLandingPanel.Children.Add(new TextBox { Width =80 });
+
+ // Beam at Start
+ CheckBox beamStartCheckBox = new CheckBox { Content = "Beam at Start" };
+ lowerLandingPanel.Children.Add(beamStartCheckBox);
+ StackPanel beamStartDetails = new StackPanel { Orientation = Orientation.Horizontal, Visibility = Visibility.Collapsed, Margin = new Thickness(0,2,0,2) };
+ beamStartDetails.Children.Add(new TextBlock { Text = "Depth (mm):", Width =100, VerticalAlignment = VerticalAlignment.Center });
+ beamStartDetails.Children.Add(new TextBox { Width =80 });
+ beamStartDetails.Children.Add(new TextBlock { Text = "Width (mm):", Width =100, VerticalAlignment = VerticalAlignment.Center });
+ beamStartDetails.Children.Add(new TextBox { Width =80 });
+ beamStartCheckBox.Checked += (s, args) => beamStartDetails.Visibility = Visibility.Visible;
+ beamStartCheckBox.Unchecked += (s, args) => beamStartDetails.Visibility = Visibility.Collapsed;
+ lowerLandingPanel.Children.Add(beamStartDetails);
+
+ // Beam at End
+ CheckBox beamEndCheckBox = new CheckBox { Content = "Beam at End" };
+ lowerLandingPanel.Children.Add(beamEndCheckBox);
+ StackPanel beamEndDetails = new StackPanel { Orientation = Orientation.Horizontal, Visibility = Visibility.Collapsed, Margin = new Thickness(0,2,0,2) };
+ beamEndDetails.Children.Add(new TextBlock { Text = "Depth (mm):", Width =100, VerticalAlignment = VerticalAlignment.Center });
+ beamEndDetails.Children.Add(new TextBox { Width =80 });
+ beamEndDetails.Children.Add(new TextBlock { Text = "Width (mm):", Width =100, VerticalAlignment = VerticalAlignment.Center });
+ beamEndDetails.Children.Add(new TextBox { Width =80 });
+ beamEndCheckBox.Checked += (s, args) => beamEndDetails.Visibility = Visibility.Visible;
+ beamEndCheckBox.Unchecked += (s, args) => beamEndDetails.Visibility = Visibility.Collapsed;
+ lowerLandingPanel.Children.Add(beamEndDetails);
+
+ flightPanel.Children.Add(lowerLandingPanel);
+
+ // Upper Landing Details
+ flightPanel.Children.Add(new TextBlock { Text = "Upper Landing Details:" });
+ StackPanel upperLandingPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0,2,0,2) };
+ upperLandingPanel.Children.Add(new TextBlock { Text = "Landing Width:", Width =150, VerticalAlignment = VerticalAlignment.Center });
+ upperLandingPanel.Children.Add(new TextBox { Width =80 });
+
+ // Wall at End
+ CheckBox wallAtEndCheckBox = new CheckBox { Content = "Wall at End" };
+ upperLandingPanel.Children.Add(wallAtEndCheckBox);
+ StackPanel wallAtEndDetails = new StackPanel { Orientation = Orientation.Horizontal, Visibility = Visibility.Collapsed, Margin = new Thickness(0,2,0,2) };
+ wallAtEndDetails.Children.Add(new TextBlock { Text = "Width:", Width =100, VerticalAlignment = VerticalAlignment.Center });
+ wallAtEndDetails.Children.Add(new TextBox { Width =80 });
+ wallAtEndCheckBox.Checked += (s, args) => wallAtEndDetails.Visibility = Visibility.Visible;
+ wallAtEndCheckBox.Unchecked += (s, args) => wallAtEndDetails.Visibility = Visibility.Collapsed;
+ upperLandingPanel.Children.Add(wallAtEndDetails);
+
+ flightPanel.Children.Add(upperLandingPanel);
+
+ FlightsPanel.Children.Add(flightPanel);
+ }
+ }
+ }
+
+ private void GroundFloorCheckBox_Checked(object sender, RoutedEventArgs e)
+ {
+ // Show the support options panel when "Ground Floor?" is checked
+ SupportOptionsPanel.Visibility = Visibility.Visible;
+ }
+
+ private void GroundFloorCheckBox_Unchecked(object sender, RoutedEventArgs e)
+ {
+ // Hide the support options panel when "Ground Floor?" is unchecked
+ SupportOptionsPanel.Visibility = Visibility.Collapsed;
+ }
+
+ private void SupportType_Checked(object sender, RoutedEventArgs e)
+ {
+ // Ensure mutual exclusivity between "Beam Support" and "Slab Thickening"
+ if (sender == BeamSupportCheckBox && BeamSupportCheckBox.IsChecked == true)
+ {
+ SlabThickeningCheckBox.IsEnabled = false;
+ }
+ else if (sender == SlabThickeningCheckBox && SlabThickeningCheckBox.IsChecked == true)
+ {
+ BeamSupportCheckBox.IsEnabled = false;
+ }
+ }
+
+ private void SupportType_Unchecked(object sender, RoutedEventArgs e)
+ {
+ // Re-enable both checkboxes when one is unchecked
+ BeamSupportCheckBox.IsEnabled = true;
+ SlabThickeningCheckBox.IsEnabled = true;
+ }
+ }
+}

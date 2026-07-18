@@ -1,0 +1,127 @@
+﻿using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.Colors;
+using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Geometry;
+using Autodesk.AutoCAD.GraphicsInterface;
+using Autodesk.AutoCAD.Runtime;
+using System;
+using System.Collections.Generic;
+using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
+using Application = Autodesk.AutoCAD.ApplicationServices.Application;
+using Polyline = Autodesk.AutoCAD.DatabaseServices.Polyline;
+
+//namespace StaircaseDetails
+//{
+//    public class StaircaseClass
+//    {
+
+//        [CommandMethod("StaircaseDetails")]
+//        public static void StaircaseDetails()
+//        {
+//            Document doc = Application.DocumentManager.MdiActiveDocument;
+//            Database db = doc.Database;
+//            Editor ed = doc.Editor;
+
+//            short oldOrtho = 0;
+//            short oldOsnap = 0;
+
+
+//            try
+//            {
+//                //turn ortho and object snap off for smooth selection
+//                //at the end, will restore the states of the modes
+//                oldOrtho = (short)Application.GetSystemVariable("ORTHOMODE");
+//                oldOsnap = (short)Application.GetSystemVariable("OSMODE");
+
+
+//                // --- Turn modes off for smooth picking ---
+//                Application.SetSystemVariable("ORTHOMODE", 0);
+//                Application.SetSystemVariable("OSMODE", 0);
+
+
+
+
+
+
+
+//            }
+//            catch (System.Exception ex)
+//            {
+//                ed.WriteMessage("\nError in nStaircaseDetails: " + ex.Message + ": " + ex.StackTrace);
+//            }
+//            finally
+//            {
+//                //restore ortho and osnap modes
+//                Application.SetSystemVariable("ORTHOMODE", oldOrtho);
+//                Application.SetSystemVariable("OSMODE", oldOsnap);
+//            }
+
+
+
+//        }
+//    }
+//}
+
+
+
+
+
+
+
+
+
+
+
+namespace StaircaseDetails
+{
+    public class StaircaseClass
+    {
+
+        [CommandMethod("StaircaseDetails")]
+        public static void StaircaseDetails()
+        {
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            Database db = doc.Database;
+            Editor ed = doc.Editor;
+
+            short oldOrtho = 0;
+            short oldOsnap = 0;
+
+
+            try
+            {
+                //turn ortho and object snap off for smooth selection
+                //at the end, will restore the states of the modes
+                oldOrtho = (short)Application.GetSystemVariable("ORTHOMODE");
+                oldOsnap = (short)Application.GetSystemVariable("OSMODE");
+
+
+                // --- Turn modes off for smooth picking ---
+                Application.SetSystemVariable("ORTHOMODE", 0);
+                Application.SetSystemVariable("OSMODE", 0);
+
+
+
+
+
+
+
+            }
+            catch (System.Exception ex)
+            {
+                ed.WriteMessage("\nError in nStaircaseDetails: " + ex.Message + ": " + ex.StackTrace);
+            }
+            finally
+            {
+                //restore ortho and osnap modes
+                Application.SetSystemVariable("ORTHOMODE", oldOrtho);
+                Application.SetSystemVariable("OSMODE", oldOsnap);
+            }
+
+
+
+        }
+    }
+}

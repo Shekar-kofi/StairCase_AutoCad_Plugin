@@ -1,0 +1,146 @@
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+
+namespace StaircaseDetails
+{
+ public partial class MainWindow : Window
+ {
+ public MainWindow()
+ {
+ InitializeComponent();
+ }
+
+ private void IntegerOnlyInput(object sender, TextCompositionEventArgs e)
+ {
+ // Allow only integer input
+ e.Handled = !int.TryParse(e.Text, out _);
+ }
+
+ private void StaircaseType_Checked(object sender, RoutedEventArgs e)
+ {
+ // Ensure mutual exclusivity between Half Turn and Quarter Turn
+ if (sender == HalfTurnCheckBox && HalfTurnCheckBox.IsChecked == true)
+ {
+ QuarterTurnCheckBox.IsEnabled = false;
+ }
+ else if (sender == QuarterTurnCheckBox && QuarterTurnCheckBox.IsChecked == true)
+ {
+ HalfTurnCheckBox.IsEnabled = false;
+ }
+ }
+
+ private void StaircaseType_Unchecked(object sender, RoutedEventArgs e)
+ {
+ // Re-enable both checkboxes when one is unchecked
+ HalfTurnCheckBox.IsEnabled = true;
+ QuarterTurnCheckBox.IsEnabled = true;
+ }
+
+ private void FlightsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+ {
+ // Clear existing flight sections
+ FlightsPanel.Children.Clear();
+
+ // Get the selected number of flights
+ if (FlightsComboBox.SelectedItem is ComboBoxItem selectedItem && int.TryParse(selectedItem.Content.ToString(), out int numberOfFlights))
+ {
+ for (int i =1; i <= numberOfFlights; i++)
+ {
+ // Create a section for each flight
+ StackPanel flightPanel = new StackPanel { Orientation = Orientation.Vertical, Margin = new Thickness(10) };
+ flightPanel.Children.Add(new TextBlock { Text = $"Flight {i} Details:" });
+
+ // Number of Steps
+ StackPanel stepsPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0,5,0,5) };
+ stepsPanel.Children.Add(new TextBlock { Text = "Number of Steps:", Width =150 });
+ TextBox stepsTextBox = new TextBox { Width =100 };
+ stepsTextBox.PreviewTextInput += IntegerOnlyInput;
+ stepsPanel.Children.Add(stepsTextBox);
+ flightPanel.Children.Add(stepsPanel);
+
+ // Lower Landing Details
+ flightPanel.Children.Add(new TextBlock { Text = "Lower Landing Details:" });
+ StackPanel lowerLandingPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0,5,0,5) };
+ lowerLandingPanel.Children.Add(new TextBlock { Text = "Wall Thickness:", Width =150 });
+ lowerLandingPanel.Children.Add(new TextBox { Width =100 });
+ lowerLandingPanel.Children.Add(new TextBlock { Text = "Beam Start:", Width =100 });
+ lowerLandingPanel.Children.Add(new CheckBox());
+ lowerLandingPanel.Children.Add(new TextBlock { Text = "Beam End:", Width =100 });
+ lowerLandingPanel.Children.Add(new CheckBox());
+ flightPanel.Children.Add(lowerLandingPanel);
+
+ // Upper Landing Details
+ flightPanel.Children.Add(new TextBlock { Text = "Upper Landing Details:" });
+ StackPanel upperLandingPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0,5,0,5) };
+ upperLandingPanel.Children.Add(new TextBlock { Text = "Slab Thickness:", Width =150 });
+ upperLandingPanel.Children.Add(new TextBox { Width =100 });
+ upperLandingPanel.Children.Add(new TextBlock { Text = "Slab Width:", Width =150 });
+ upperLandingPanel.Children.Add(new TextBox { Width =100 });
+ flightPanel.Children.Add(upperLandingPanel);
+
+ // Maxpan Options
+ StackPanel maxpanPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0,5,0,5) };
+ maxpanPanel.Children.Add(new TextBlock { Text = "Maxpan Section:", Width =150 });
+ ComboBox maxpanComboBox = new ComboBox { Width =100 };
+ maxpanComboBox.Items.Add("Longitudinal");
+ maxpanComboBox.Items.Add("Transverse");
+ maxpanPanel.Children.Add(maxpanComboBox);
+ maxpanPanel.Children.Add(new TextBlock { Text = "Rib Width:", Width =100 });
+ maxpanPanel.Children.Add(new TextBox { Width =100 });
+ maxpanPanel.Children.Add(new TextBlock { Text = "Bars per Rib:", Width =100 });
+ maxpanPanel.Children.Add(new TextBox { Width =100 });
+ flightPanel.Children.Add(maxpanPanel);
+
+ // Reinforcement Details
+ flightPanel.Children.Add(new TextBlock { Text = "Reinforcement Details:" });
+ StackPanel reinforcementPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0,5,0,5) };
+ reinforcementPanel.Children.Add(new TextBlock { Text = "Longitudinal Bar Dia:", Width =150 });
+ reinforcementPanel.Children.Add(new ComboBox { Width =100 });
+ reinforcementPanel.Children.Add(new TextBlock { Text = "Spacing:", Width =100 });
+ reinforcementPanel.Children.Add(new ComboBox { Width =100 });
+ reinforcementPanel.Children.Add(new TextBlock { Text = "Transverse Bar Dia:", Width =150 });
+ reinforcementPanel.Children.Add(new ComboBox { Width =100 });
+ reinforcementPanel.Children.Add(new TextBlock { Text = "Spacing:", Width =100 });
+ reinforcementPanel.Children.Add(new ComboBox { Width =100 });
+ flightPanel.Children.Add(reinforcementPanel);
+
+ // Add flight panel to FlightsPanel
+ FlightsPanel.Children.Add(flightPanel);
+ }
+ }
+ }
+
+ private void GroundFloorCheckBox_Checked(object sender, RoutedEventArgs e)
+ {
+ // Show the support options panel when "Ground Floor?" is checked
+ SupportOptionsPanel.Visibility = Visibility.Visible;
+ }
+
+ private void GroundFloorCheckBox_Unchecked(object sender, RoutedEventArgs e)
+ {
+ // Hide the support options panel when "Ground Floor?" is unchecked
+ SupportOptionsPanel.Visibility = Visibility.Collapsed;
+ }
+
+ private void SupportType_Checked(object sender, RoutedEventArgs e)
+ {
+ // Ensure mutual exclusivity between "Beam Support" and "Slab Thickening"
+ if (sender == BeamSupportCheckBox && BeamSupportCheckBox.IsChecked == true)
+ {
+ SlabThickeningCheckBox.IsEnabled = false;
+ }
+ else if (sender == SlabThickeningCheckBox && SlabThickeningCheckBox.IsChecked == true)
+ {
+ BeamSupportCheckBox.IsEnabled = false;
+ }
+ }
+
+ private void SupportType_Unchecked(object sender, RoutedEventArgs e)
+ {
+ // Re-enable both checkboxes when one is unchecked
+ BeamSupportCheckBox.IsEnabled = true;
+ SlabThickeningCheckBox.IsEnabled = true;
+ }
+ }
+}

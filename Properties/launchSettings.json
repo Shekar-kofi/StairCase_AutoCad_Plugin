@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "StaircaseDetails": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Executable",
+      "executablePath": "D:\\AutoCAD 2024\\acad.exe",
+      "commandLineArgs": "/nologo",
+      "workingDirectory": "C:\\Users\\sheka\\Downloads\\Staircase detailing\\Staircase detailing\\StaircaseDetails\\bin\\Debug\\net472"
+    }
+  }
+}

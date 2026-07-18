@@ -1,0 +1,71 @@
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+
+namespace StaircaseDetails
+{
+ public partial class MainWindow : Window
+ {
+ public MainWindow()
+ {
+ InitializeComponent();
+ }
+
+ private void IntegerOnlyInput(object sender, TextCompositionEventArgs e)
+ {
+ // Allow only integer input
+ e.Handled = !int.TryParse(e.Text, out _);
+ }
+
+ private void GroundFloorCheckBox_Checked(object sender, RoutedEventArgs e)
+ {
+ // Show the support options panel when "Ground Floor?" is checked
+ SupportOptionsPanel.Visibility = Visibility.Visible;
+ }
+
+ private void GroundFloorCheckBox_Unchecked(object sender, RoutedEventArgs e)
+ {
+ // Hide the support options panel when "Ground Floor?" is unchecked
+ SupportOptionsPanel.Visibility = Visibility.Collapsed;
+ }
+
+ private void SupportType_Checked(object sender, RoutedEventArgs e)
+ {
+ // Ensure mutual exclusivity between "Beam Support" and "Slab Thickening"
+ if (sender == BeamSupportCheckBox && BeamSupportCheckBox.IsChecked == true)
+ {
+ SlabThickeningCheckBox.IsEnabled = false;
+ }
+ else if (sender == SlabThickeningCheckBox && SlabThickeningCheckBox.IsChecked == true)
+ {
+ BeamSupportCheckBox.IsEnabled = false;
+ }
+ }
+
+ private void SupportType_Unchecked(object sender, RoutedEventArgs e)
+ {
+ // Re-enable the other checkbox when one is unchecked
+ if (sender == BeamSupportCheckBox && BeamSupportCheckBox.IsChecked == false)
+ {
+ SlabThickeningCheckBox.IsEnabled = true;
+ }
+ else if (sender == SlabThickeningCheckBox && SlabThickeningCheckBox.IsChecked == false)
+ {
+ BeamSupportCheckBox.IsEnabled = true;
+ }
+ }
+
+ private void StaircaseType_Checked(object sender, RoutedEventArgs e)
+ {
+ // Ensure only one staircase type is selected
+ if (sender == HalfTurnCheckBox && HalfTurnCheckBox.IsChecked == true)
+ {
+ QuarterTurnCheckBox.IsChecked = false;
+ }
+ else if (sender == QuarterTurnCheckBox && QuarterTurnCheckBox.IsChecked == true)
+ {
+ HalfTurnCheckBox.IsChecked = false;
+ }
+ }
+ }
+}
