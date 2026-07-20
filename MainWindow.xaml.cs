@@ -25,6 +25,12 @@ namespace StaircaseDetails
             public TextBox BeamEndWidth;
             public TextBox UpperLandingWidth;
             public TextBox UpperLandingThickness;
+            public System.Windows.Controls.CheckBox UpperBeamAtStart;   // NEW
+            public TextBox UpperBeamStartDepth;                          // NEW
+            public TextBox UpperBeamStartWidth;                          // NEW
+            public System.Windows.Controls.CheckBox UpperBeamAtEnd;     // NEW
+            public TextBox UpperBeamEndDepth;                            // NEW
+            public TextBox UpperBeamEndWidth;                            // NEW
             public System.Windows.Controls.CheckBox WallAtEnd;
             public TextBox WallWidth;
             public System.Windows.Controls.CheckBox Solid;
@@ -106,99 +112,66 @@ namespace StaircaseDetails
 
         private void FlightsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Clear existing flight sections
             FlightsPanel.Children.Clear();
             Flights.Clear();
 
-            // Get the selected number of flights
-            if (FlightsComboBox.SelectedItem is ComboBoxItem selectedItem && int.TryParse(selectedItem.Content.ToString(), out int numberOfFlights))
+            if (FlightsComboBox.SelectedItem is ComboBoxItem selectedItem &&
+                int.TryParse(selectedItem.Content.ToString(), out int numberOfFlights))
             {
                 for (int i = 1; i <= numberOfFlights; i++)
                 {
                     FlightData fd = new FlightData { FlightNumber = i };
 
-                    // Create a section for each flight
-                    //StackPanel flightPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Vertical, Margin = new Thickness(10) };
-                    //flightPanel.Children.Add(new TextBlock { Text = $"Flight {i} Details:" });
-
-                    StackPanel flightPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Vertical, Margin = new Thickness(10) };
-                    flightPanel.Children.Add(new TextBlock { Text = $"Flight {i} Details:", FontWeight = FontWeights.Bold });
+                    StackPanel flightPanel = new StackPanel
+                    {
+                        Orientation = System.Windows.Controls.Orientation.Vertical,
+                        Margin = new Thickness(10)
+                    };
+                    flightPanel.Children.Add(new TextBlock { Text = $"Flight {i} Details:" });
 
                     // Number of Steps
-                    //StackPanel stepsPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
-                    //stepsPanel.Children.Add(new TextBlock { Text = "Number of Steps:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
-                    //TextBox numStepsBox = new TextBox { Width = 50 };
-                    //numStepsBox.PreviewTextInput += IntegerOnlyInput;
-                    //stepsPanel.Children.Add(numStepsBox);
-                    //fd.NumberOfSteps = numStepsBox;
-                    //flightPanel.Children.Add(stepsPanel);
-
                     StackPanel stepsPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
                     stepsPanel.Children.Add(new TextBlock { Text = "Number of Steps:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
-                    TextBox numStepsBox = new TextBox { Width = 50, Text = "11" };   // ← Default
+                    TextBox numStepsBox = new TextBox { Width = 50 };
                     numStepsBox.PreviewTextInput += IntegerOnlyInput;
                     stepsPanel.Children.Add(numStepsBox);
                     fd.NumberOfSteps = numStepsBox;
                     flightPanel.Children.Add(stepsPanel);
 
-                    // Lower Slab / Landing Details
-                    flightPanel.Children.Add(new TextBlock { Text = "Lower Slab / Landing Details:" });
+                    // ===================== LOWER SLAB / LANDING =====================
+                    flightPanel.Children.Add(new TextBlock { Text = "Lower Slab / Landing Details:", Margin = new Thickness(0, 4, 0, 2) });
                     StackPanel lowerLandingPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Vertical, Margin = new Thickness(0, 2, 0, 2) };
-
-
-                    // Slab / Landing Width
-                    //StackPanel landingWidthPanel = new StackPanel
-                    //{
-                    //    Orientation = System.Windows.Controls.Orientation.Horizontal,
-                    //    Margin = new Thickness(0, 2, 0, 2)
-                    //};
-                    //landingWidthPanel.Children.Add(new TextBlock { Text = "Slab / Landing Width:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
-                    //TextBox lowerWidthBox = new TextBox { Width = 50 };
-                    //landingWidthPanel.Children.Add(lowerWidthBox);
-                    //fd.LowerLandingWidth = lowerWidthBox;
-                    //lowerLandingPanel.Children.Add(landingWidthPanel);
 
                     StackPanel landingWidthPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
                     landingWidthPanel.Children.Add(new TextBlock { Text = "Slab / Landing Width:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
-                    TextBox lowerWidthBox = new TextBox { Width = 50, Text = "1200" };   // ← Default
+                    TextBox lowerWidthBox = new TextBox { Width = 50 };
                     landingWidthPanel.Children.Add(lowerWidthBox);
                     fd.LowerLandingWidth = lowerWidthBox;
                     lowerLandingPanel.Children.Add(landingWidthPanel);
 
-                    // Slab/Landing Thickness
-                    //StackPanel lowerSlabThicknessPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
-                    //lowerSlabThicknessPanel.Children.Add(new TextBlock { Text = "Slab/Landing Thickness:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
-                    //TextBox lowerThicknessBox = new TextBox { Width = 50 };
-                    //lowerSlabThicknessPanel.Children.Add(lowerThicknessBox);
-                    //fd.LowerLandingThickness = lowerThicknessBox;
-                    //lowerLandingPanel.Children.Add(lowerSlabThicknessPanel);
-
-                    StackPanel lowerSlabThicknessPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
-                    lowerSlabThicknessPanel.Children.Add(new TextBlock { Text = "Slab/Landing Thickness:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
-                    TextBox lowerThicknessBox = new TextBox { Width = 50, Text = "150" };   // ← Default
-                    lowerSlabThicknessPanel.Children.Add(lowerThicknessBox);
+                    StackPanel lowerThicknessPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
+                    lowerThicknessPanel.Children.Add(new TextBlock { Text = "Slab/Landing Thickness:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
+                    TextBox lowerThicknessBox = new TextBox { Width = 50 };
+                    lowerThicknessPanel.Children.Add(lowerThicknessBox);
                     fd.LowerLandingThickness = lowerThicknessBox;
-                    lowerLandingPanel.Children.Add(lowerSlabThicknessPanel);
+                    lowerLandingPanel.Children.Add(lowerThicknessPanel);
 
-                    // Link lower landing to previous flight's upper landing (mirrors, disabled)
+                    // Link lower landing to previous flight upper landing
                     if (i > 1)
                     {
                         FlightData prevFlight = Flights[i - 2];
-
                         lowerWidthBox.IsEnabled = false;
                         lowerThicknessBox.IsEnabled = false;
-
                         lowerWidthBox.Text = prevFlight.UpperLandingWidth.Text;
                         lowerThicknessBox.Text = prevFlight.UpperLandingThickness.Text;
-
                         prevFlight.UpperLandingWidth.TextChanged += (s, args) => lowerWidthBox.Text = prevFlight.UpperLandingWidth.Text;
                         prevFlight.UpperLandingThickness.TextChanged += (s, args) => lowerThicknessBox.Text = prevFlight.UpperLandingThickness.Text;
                     }
 
-                    // Beam at Start
+                    // Beam at Start (lower landing)
                     StackPanel beamStartPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
                     System.Windows.Controls.CheckBox beamStartCheckBox = new System.Windows.Controls.CheckBox { Content = "Beam at Start" };
-                    if (i == 1) beamStartCheckBox.Tag = "Flight1";
+                    if (i == 1) beamStartCheckBox.Tag = "Flight1Lower";
                     beamStartPanel.Children.Add(beamStartCheckBox);
                     fd.BeamAtStart = beamStartCheckBox;
                     lowerLandingPanel.Children.Add(beamStartPanel);
@@ -216,10 +189,10 @@ namespace StaircaseDetails
                     beamStartCheckBox.Unchecked += (s, args) => beamStartDetails.Visibility = Visibility.Collapsed;
                     lowerLandingPanel.Children.Add(beamStartDetails);
 
-                    // Beam at End
+                    // Beam at End (lower landing)
                     StackPanel beamEndPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
                     System.Windows.Controls.CheckBox beamEndCheckBox = new System.Windows.Controls.CheckBox { Content = "Beam at End" };
-                    if (i == 1) beamEndCheckBox.Tag = "Flight1";
+                    if (i == 1) beamEndCheckBox.Tag = "Flight1Lower";
                     beamEndPanel.Children.Add(beamEndCheckBox);
                     fd.BeamAtEnd = beamEndCheckBox;
                     lowerLandingPanel.Children.Add(beamEndPanel);
@@ -237,51 +210,83 @@ namespace StaircaseDetails
                     beamEndCheckBox.Unchecked += (s, args) => beamEndDetails.Visibility = Visibility.Collapsed;
                     lowerLandingPanel.Children.Add(beamEndDetails);
 
-                    // Disable beam checkboxes for flights after Flight 1 (mirrored/inherited, not editable)
+                    // Disable lower beam checkboxes for flights after Flight 1
                     if (i > 1)
                     {
                         beamStartCheckBox.IsEnabled = false;
                         beamEndCheckBox.IsEnabled = false;
                     }
 
-                    // Toggle visibility based on GroundFloorCheckBox state (Flight 1 only)
-                    if (i == 1)
+                    // Hide lower beam rows entirely for Flight 1 when Ground Floor is checked
+                    if (i == 1 && GroundFloorCheckBox.IsChecked == true)
                     {
-                        if (GroundFloorCheckBox.IsChecked == true)
-                        {
-                            beamStartPanel.Visibility = Visibility.Collapsed;
-                            beamEndPanel.Visibility = Visibility.Collapsed;
-                        }
-                        else
-                        {
-                            beamStartPanel.Visibility = Visibility.Visible;
-                            beamEndPanel.Visibility = Visibility.Visible;
-                        }
+                        beamStartPanel.Visibility = Visibility.Collapsed;
+                        beamStartDetails.Visibility = Visibility.Collapsed;
+                        beamEndPanel.Visibility = Visibility.Collapsed;
+                        beamEndDetails.Visibility = Visibility.Collapsed;
                     }
 
                     flightPanel.Children.Add(lowerLandingPanel);
 
-                    // Upper Slab / Landing Details
-                    flightPanel.Children.Add(new TextBlock { Text = "Upper Slab / Landing Details:" });
+                    // ===================== UPPER SLAB / LANDING =====================
+                    flightPanel.Children.Add(new TextBlock { Text = "Upper Slab / Landing Details:", Margin = new Thickness(0, 4, 0, 2) });
                     StackPanel upperLandingPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Vertical, Margin = new Thickness(0, 2, 0, 2) };
 
-                    StackPanel upperLandingWidthPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
-                    upperLandingWidthPanel.Children.Add(new TextBlock { Text = "Slab / Landing Width:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
-                    //TextBox upperWidthBox = new TextBox { Width = 50 };
-                    TextBox upperWidthBox = new TextBox { Width = 50, Text = "1200" };
-                    upperLandingWidthPanel.Children.Add(upperWidthBox);
+                    StackPanel upperWidthPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
+                    upperWidthPanel.Children.Add(new TextBlock { Text = "Slab / Landing Width:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
+                    TextBox upperWidthBox = new TextBox { Width = 50 };
+                    upperWidthPanel.Children.Add(upperWidthBox);
                     fd.UpperLandingWidth = upperWidthBox;
-                    upperLandingPanel.Children.Add(upperLandingWidthPanel);
+                    upperLandingPanel.Children.Add(upperWidthPanel);
 
-                    StackPanel upperSlabThicknessPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
-                    upperSlabThicknessPanel.Children.Add(new TextBlock { Text = "Slab/Landing Thickness:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
-                    //TextBox upperThicknessBox = new TextBox { Width = 50 };
-                    TextBox upperThicknessBox = new TextBox { Width = 50, Text = "150" };
-                    upperSlabThicknessPanel.Children.Add(upperThicknessBox);
+                    StackPanel upperThicknessPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
+                    upperThicknessPanel.Children.Add(new TextBlock { Text = "Slab/Landing Thickness:", Width = 150, VerticalAlignment = VerticalAlignment.Center });
+                    TextBox upperThicknessBox = new TextBox { Width = 50 };
+                    upperThicknessPanel.Children.Add(upperThicknessBox);
                     fd.UpperLandingThickness = upperThicknessBox;
-                    upperLandingPanel.Children.Add(upperSlabThicknessPanel);
+                    upperLandingPanel.Children.Add(upperThicknessPanel);
 
-                    // Wall at End
+                    // Beam at Start (upper landing) — NEW
+                    StackPanel upperBeamStartPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
+                    System.Windows.Controls.CheckBox upperBeamStartCheckBox = new System.Windows.Controls.CheckBox { Content = "Beam at Start" };
+                    upperBeamStartPanel.Children.Add(upperBeamStartCheckBox);
+                    fd.UpperBeamAtStart = upperBeamStartCheckBox;
+                    upperLandingPanel.Children.Add(upperBeamStartPanel);
+
+                    StackPanel upperBeamStartDetails = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Visibility = Visibility.Collapsed, Margin = new Thickness(0, 2, 0, 2) };
+                    upperBeamStartDetails.Children.Add(new TextBlock { Text = "Depth (mm):", Width = 100, VerticalAlignment = VerticalAlignment.Center });
+                    TextBox upperBeamStartDepthBox = new TextBox { Width = 50 };
+                    upperBeamStartDetails.Children.Add(upperBeamStartDepthBox);
+                    fd.UpperBeamStartDepth = upperBeamStartDepthBox;
+                    upperBeamStartDetails.Children.Add(new TextBlock { Text = "Width (mm):", Width = 100, VerticalAlignment = VerticalAlignment.Center });
+                    TextBox upperBeamStartWidthBox = new TextBox { Width = 50 };
+                    upperBeamStartDetails.Children.Add(upperBeamStartWidthBox);
+                    fd.UpperBeamStartWidth = upperBeamStartWidthBox;
+                    upperBeamStartCheckBox.Checked += (s, args) => upperBeamStartDetails.Visibility = Visibility.Visible;
+                    upperBeamStartCheckBox.Unchecked += (s, args) => upperBeamStartDetails.Visibility = Visibility.Collapsed;
+                    upperLandingPanel.Children.Add(upperBeamStartDetails);
+
+                    // Beam at End (upper landing) — NEW
+                    StackPanel upperBeamEndPanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 2) };
+                    System.Windows.Controls.CheckBox upperBeamEndCheckBox = new System.Windows.Controls.CheckBox { Content = "Beam at End" };
+                    upperBeamEndPanel.Children.Add(upperBeamEndCheckBox);
+                    fd.UpperBeamAtEnd = upperBeamEndCheckBox;
+                    upperLandingPanel.Children.Add(upperBeamEndPanel);
+
+                    StackPanel upperBeamEndDetails = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal, Visibility = Visibility.Collapsed, Margin = new Thickness(0, 2, 0, 2) };
+                    upperBeamEndDetails.Children.Add(new TextBlock { Text = "Depth (mm):", Width = 100, VerticalAlignment = VerticalAlignment.Center });
+                    TextBox upperBeamEndDepthBox = new TextBox { Width = 50 };
+                    upperBeamEndDetails.Children.Add(upperBeamEndDepthBox);
+                    fd.UpperBeamEndDepth = upperBeamEndDepthBox;
+                    upperBeamEndDetails.Children.Add(new TextBlock { Text = "Width (mm):", Width = 100, VerticalAlignment = VerticalAlignment.Center });
+                    TextBox upperBeamEndWidthBox = new TextBox { Width = 50 };
+                    upperBeamEndDetails.Children.Add(upperBeamEndWidthBox);
+                    fd.UpperBeamEndWidth = upperBeamEndWidthBox;
+                    upperBeamEndCheckBox.Checked += (s, args) => upperBeamEndDetails.Visibility = Visibility.Visible;
+                    upperBeamEndCheckBox.Unchecked += (s, args) => upperBeamEndDetails.Visibility = Visibility.Collapsed;
+                    upperLandingPanel.Children.Add(upperBeamEndDetails);
+
+                    // Wall at End (upper landing)
                     System.Windows.Controls.CheckBox wallAtEndCheckBox = new System.Windows.Controls.CheckBox { Content = "Wall at End" };
                     fd.WallAtEnd = wallAtEndCheckBox;
                     upperLandingPanel.Children.Add(wallAtEndCheckBox);
@@ -294,8 +299,8 @@ namespace StaircaseDetails
                     wallAtEndCheckBox.Unchecked += (s, args) => wallAtEndDetails.Visibility = Visibility.Collapsed;
                     upperLandingPanel.Children.Add(wallAtEndDetails);
 
-                    // Slab / Slab / Landing Type
-                    upperLandingPanel.Children.Add(new TextBlock { Text = "Slab / Slab / Landing Type:" });
+                    // Slab type
+                    upperLandingPanel.Children.Add(new TextBlock { Text = "Slab / Slab / Landing Type:", Margin = new Thickness(0, 4, 0, 2) });
                     System.Windows.Controls.CheckBox solidCheckBox = new System.Windows.Controls.CheckBox { Content = "Solid" };
                     System.Windows.Controls.CheckBox maxpanCheckBox = new System.Windows.Controls.CheckBox { Content = "Maxpan" };
                     fd.Solid = solidCheckBox;
@@ -307,10 +312,11 @@ namespace StaircaseDetails
                     upperLandingPanel.Children.Add(solidCheckBox);
                     upperLandingPanel.Children.Add(maxpanCheckBox);
 
-                    // Maxpan Details
+                    // Maxpan details
                     StackPanel maxpanDetails = new StackPanel { Orientation = System.Windows.Controls.Orientation.Vertical, Visibility = Visibility.Collapsed };
                     maxpanCheckBox.Checked += (s, args) => maxpanDetails.Visibility = Visibility.Visible;
                     maxpanCheckBox.Unchecked += (s, args) => maxpanDetails.Visibility = Visibility.Collapsed;
+
                     StackPanel sectionVisiblePanel = new StackPanel { Orientation = System.Windows.Controls.Orientation.Horizontal };
                     sectionVisiblePanel.Children.Add(new TextBlock { Text = "Section Visible:", Width = 150 });
                     System.Windows.Controls.CheckBox longitudinalCheckBox = new System.Windows.Controls.CheckBox { Content = "Longitudinal" };
@@ -330,7 +336,6 @@ namespace StaircaseDetails
                     TextBox ribWidthBox = new TextBox { Width = 50 };
                     ribDetailsPanel.Children.Add(ribWidthBox);
                     fd.RibWidth = ribWidthBox;
-
                     ribDetailsPanel.Children.Add(new TextBlock { Text = "Bars per Rib:", Width = 100 });
                     TextBox barsPerRibBox = new TextBox { Width = 50 };
                     ribDetailsPanel.Children.Add(barsPerRibBox);
@@ -348,20 +353,20 @@ namespace StaircaseDetails
 
         private void GroundFloorCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            // Show the support options panel when "Ground Floor?" is checked
             SupportOptionsPanel.Visibility = Visibility.Visible;
 
-            // Iterate through FlightsPanel to find Flight 1
             foreach (var child in FlightsPanel.Children)
             {
                 if (child is StackPanel flightPanel)
                 {
-                    var flightLabel = flightPanel.Children.OfType<TextBlock>().FirstOrDefault(tb => tb.Text == "Flight 1 Details:");
+                    var flightLabel = flightPanel.Children.OfType<TextBlock>()
+                        .FirstOrDefault(tb => tb.Text == "Flight 1 Details:");
                     if (flightLabel != null)
                     {
+                        // Hide the entire beam row AND its detail panel
+                        HideControlsByTag(flightPanel, "Flight1Lower");
                         var beamStartDetails = FindStackPanelByTag(flightPanel, "BeamStartDetails");
                         var beamEndDetails = FindStackPanelByTag(flightPanel, "BeamEndDetails");
-
                         if (beamStartDetails != null) beamStartDetails.Visibility = Visibility.Collapsed;
                         if (beamEndDetails != null) beamEndDetails.Visibility = Visibility.Collapsed;
                     }
@@ -391,23 +396,41 @@ namespace StaircaseDetails
 
         private void GroundFloorCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            // Hide the support options panel when "Ground Floor?" is unchecked
             SupportOptionsPanel.Visibility = Visibility.Collapsed;
 
             foreach (var child in FlightsPanel.Children)
             {
                 if (child is StackPanel flightPanel)
                 {
-                    var flightLabel = flightPanel.Children.OfType<TextBlock>().FirstOrDefault(tb => tb.Text == "Flight 1 Details:");
+                    var flightLabel = flightPanel.Children.OfType<TextBlock>()
+                        .FirstOrDefault(tb => tb.Text == "Flight 1 Details:");
                     if (flightLabel != null)
                     {
-                        var beamStartDetails = FindStackPanelByTag(flightPanel, "BeamStartDetails");
-                        var beamEndDetails = FindStackPanelByTag(flightPanel, "BeamEndDetails");
-
-                        if (beamStartDetails != null) beamStartDetails.Visibility = Visibility.Visible;
-                        if (beamEndDetails != null) beamEndDetails.Visibility = Visibility.Visible;
+                        ShowControlsByTag(flightPanel, "Flight1Lower");
                     }
                 }
+            }
+        }
+
+        private void HideControlsByTag(Panel parent, string tag)
+        {
+            foreach (var child in parent.Children)
+            {
+                if (child is FrameworkElement fe && fe.Tag?.ToString() == tag)
+                    fe.Visibility = Visibility.Collapsed;
+                else if (child is Panel nested)
+                    HideControlsByTag(nested, tag);
+            }
+        }
+
+        private void ShowControlsByTag(Panel parent, string tag)
+        {
+            foreach (var child in parent.Children)
+            {
+                if (child is FrameworkElement fe && fe.Tag?.ToString() == tag)
+                    fe.Visibility = Visibility.Visible;
+                else if (child is Panel nested)
+                    ShowControlsByTag(nested, tag);
             }
         }
 
@@ -468,7 +491,8 @@ namespace StaircaseDetails
                 {
                     foreach (var element in flightPanel.Children)
                     {
-                        if (element is System.Windows.Controls.CheckBox checkBox && checkBox.Tag?.ToString() == "Flight1")
+                        if (element is System.Windows.Controls.CheckBox checkBox
+                            && checkBox.Tag?.ToString() == "Flight1Lower")
                         {
                             checkBox.IsEnabled = isEnabled;
                         }
